@@ -11,4 +11,8 @@ public :
 	Color operator*(float k) const {
 		return Color(r * k, g * k, b * k);
 	}
+
+	Color operator+(const Color& otro) const {
+		return Color(r + otro.r, g + otro.g, b + otro.b);
+	}
 };

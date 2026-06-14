@@ -10,7 +10,7 @@ public :
 	float radio;
 
 	Esfera();
-	Esfera(const Vector3D& c, float r, const Color& col);
+	Esfera(const Vector3D& c, float r, const Material& mat);
 	bool intersecta(const Rayo& rayo, float& alfa) const override;
 	Vector3D normal(const Vector3D& punto) const override;
 };

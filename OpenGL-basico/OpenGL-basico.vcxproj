@@ -84,6 +84,7 @@
     <ClCompile Include="..\src\Esfera.cpp" />
     <ClCompile Include="..\src\Luz.cpp" />
     <ClCompile Include="..\src\Mapeador.cpp" />
+    <ClCompile Include="..\src\Material.cpp" />
     <ClCompile Include="..\src\Plano.cpp" />
     <ClCompile Include="..\src\Rayo.cpp" />
     <ClCompile Include="..\src\Vector3D.cpp" />
@@ -92,8 +93,10 @@
     <ClInclude Include="..\headers\Color.h" />
     <ClInclude Include="..\headers\Escenario.h" />
     <ClInclude Include="..\headers\Esfera.h" />
+    <ClInclude Include="..\headers\Interseccion.h" />
     <ClInclude Include="..\headers\Luz.h" />
     <ClInclude Include="..\headers\Mapeador.h" />
+    <ClInclude Include="..\headers\Material.h" />
     <ClInclude Include="..\headers\Objeto.h" />
     <ClInclude Include="..\headers\Plano.h" />
     <ClInclude Include="..\headers\Rayo.h" />

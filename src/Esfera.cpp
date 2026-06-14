@@ -4,7 +4,7 @@
 
 Esfera::Esfera() : centro(), radio(0.0f) {}
 
-Esfera::Esfera(const Vector3D& c, float r, const Color& col) : Objeto(col), centro(c), radio(r) {}
+Esfera::Esfera(const Vector3D& c, float r, const Material& mat) : Objeto(mat), centro(c), radio(r) {}
 
 bool Esfera::intersecta(const Rayo& rayo, float& alfa) const {
 	float a = rayo.direccion * rayo.direccion;

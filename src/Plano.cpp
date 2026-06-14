@@ -2,7 +2,7 @@
 
 Plano::Plano() {}
 
-Plano::Plano(const Vector3D& p, const Vector3D& n, const Color& col) : Objeto(col), punto(p), direccionNormal(n) {}
+Plano::Plano(const Vector3D& p, const Vector3D& n, const Material& mat) : Objeto(mat), punto(p), direccionNormal(n) {}
 
 bool Plano::intersecta(const Rayo& rayo, float& alfa) const {
 	alfa = 0.0f;
