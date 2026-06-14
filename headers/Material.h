@@ -11,7 +11,8 @@ public :
 	float kRefraccion;
 	float kEspecular;
 	float nPhong;
+	float nRefraccion;
 
 	Material();
-	Material(const Color& col, float kAmb, float kDif, float kRfx, float kRfr, float kEsp, float nPh);
+	Material(const Color& col, float kAmb, float kDif, float kRfx, float kRfr, float kEsp, float nPh, float nRf);
 };

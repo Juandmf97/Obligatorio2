@@ -90,9 +90,39 @@ Color Mapeador::calcularReflexion(const Rayo& rayoIncidente, const Interseccion&
 	return colorReflejado;
 }
 
-Color Mapeador::calcularColor(const Interseccion& inter, const Color& colorReflejado, const Color& colorDifuso) {
+Color Mapeador::calcularRefraccion(const Rayo& rayoIncidente, const Interseccion& inter, const Escenario& escenario, const int profundidad) {
+	Vector3D I = rayoIncidente.direccion.normalizado();
+	Vector3D N = inter.normal;
+
+	float n1 = 1.0f;
+	float n2 = inter.objetoIntersectado->material.nRefraccion;
+	float coseno = I * N;
+	if (coseno > 0.0f) {
+		float n0 = n1;
+		n1 = n2;
+		n2 = n0;
+		N = N * (-1.0f);
+	}
+	else {
+		coseno = -1 * coseno;
+	}
+	float factor = n1 / n2;
+	float nuevoCosenoCuadrado = 1 - factor * factor * (1 - coseno * coseno);
+	if (nuevoCosenoCuadrado < 0) {
+		return Color(1, 0, 0);
+	}
+	float nuevoCoseno = sqrt(nuevoCosenoCuadrado);
+	Vector3D direccionRefraccion = (I * factor + N * (factor * coseno - nuevoCoseno)).normalizado();
+	Rayo rayo(inter.puntoInterseccion - N * 0.001f, direccionRefraccion);
+	Color colorRefraccion = interseccion(rayo, escenario, profundidad + 1);
+	return colorRefraccion;
+}
+
+
+Color Mapeador::calcularColor(const Interseccion& inter, const Color& colorReflejado, const Color& colorDifuso, const Color& colorRefractado) {
 	float kRfx = inter.objetoIntersectado->material.kReflexion;
-	return colorDifuso * (1 - kRfx) + colorReflejado * kRfx;
+	float kRfr = inter.objetoIntersectado->material.kRefraccion;
+	return colorDifuso * (1 - kRfx - kRfr) + colorReflejado * kRfx + colorRefractado * kRfr;
 }
 
 Color Mapeador::interseccion(const Rayo& rayo, const Escenario& escenario, int profundidad) {
@@ -120,7 +150,8 @@ Color Mapeador::interseccion(const Rayo& rayo, const Escenario& escenario, int p
 		}
 
 		Color colorReflejado = calcularReflexion(rayo, inter, escenario, profundidad);
-		Color colorFinal = calcularColor(inter, colorReflejado, colorDifuso);
+		Color colorRefractado = calcularRefraccion(rayo, inter, escenario, profundidad);
+		Color colorFinal = calcularColor(inter, colorReflejado, colorDifuso, colorRefractado);
 		return colorFinal;
 	}
 
