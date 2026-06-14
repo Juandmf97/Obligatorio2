@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cmath>
+
 class Color {
 public :
 	float r, g, b;
@@ -9,10 +11,10 @@ public :
 	Color(float red, float green, float blue) : r(red), g(green), b(blue) {}
 
 	Color operator*(float k) const {
-		return Color(r * k, g * k, b * k);
+		return Color(std::fmin(1.0, r * k), std::fmin(1.0, g * k), std::fmin(1.0, b * k));
 	}
 
 	Color operator+(const Color& otro) const {
-		return Color(r + otro.r, g + otro.g, b + otro.b);
+		return Color(std::fmin(1.0,r + otro.r), std::fmin(1.0, g + otro.g), std::fmin(1.0, b + otro.b));
 	}
 };

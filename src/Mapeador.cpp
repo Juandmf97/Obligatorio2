@@ -47,31 +47,31 @@ bool Mapeador::estaSombreado(const Escenario& escenario, const Interseccion& int
 	return sombreado;
 }
 
-float Mapeador::sombrear(const Luz* luz, const Interseccion& inter, const bool sombreado) {
-	float luzDifusa = 0.0f;
+Color Mapeador::sombrear(const Luz* luz, const Interseccion& inter, const bool sombreado, const Rayo& rayoIncidente) {
+	Color luzDifusa;
+	Color luzPhong;
+	Color luzDifusaYPhong;
 	if (!sombreado) {
 		Vector3D L = luz->obtenerDireccion(inter.puntoInterseccion) * -1;
+		Vector3D R = L - (inter.normal * 2.0f) * (L * inter.normal);
+		R = (R* (-1.0f)).normalizado();
+		Vector3D V = (rayoIncidente.direccion * -1).normalizado();
 		float distancia = luz->obtenerDistancia(inter.puntoInterseccion);
 		float factorAtenuacion = atenuar(distancia);
-		luzDifusa = inter.normal * L * factorAtenuacion;
-		if (luzDifusa < 0.0f) {
-			luzDifusa = 0.0f;
-		}
+		luzDifusa = inter.objetoIntersectado->material.color * std::fmax(0.0f,inter.normal * L) * inter.objetoIntersectado->material.kDifusa;
+		luzPhong = luz->color * pow(std::fmax(0.0f, R * V), inter.objetoIntersectado->material.nPhong);
+		luzPhong = luzPhong * inter.objetoIntersectado->material.kEspecular;
+		luzDifusaYPhong =  (luzDifusa + luzPhong) * factorAtenuacion;
 	}
-	return luzDifusa;
+
+	return luzDifusaYPhong;
 }
 
-Color Mapeador::calcularIluminacion(float luzDifusa, const Interseccion& inter, const Escenario& escenario) {
+Color Mapeador::calcularIluminacion(const Color& luzDifusa, const Interseccion& inter, const Escenario& escenario) {
 	float intensidadAmbiente = escenario.luzAmbiente;
-	float luzAmbiente = inter.objetoIntersectado->material.kAmbiente * intensidadAmbiente;
-	luzDifusa *= inter.objetoIntersectado->material.kDifusa;
-	float intensidad = luzAmbiente + luzDifusa;
-	if (intensidad > 1.0f) {
-		intensidad = 1.0f;
-	}
-
-	Color colorDifuso = inter.objetoIntersectado->material.color * intensidad;
-	return colorDifuso;
+	Color luzAmbiente = inter.objetoIntersectado->material.color * inter.objetoIntersectado->material.kAmbiente * intensidadAmbiente;
+	Color luzTotal = luzAmbiente + luzDifusa;
+	return luzTotal;
 }
 
 Color Mapeador::calcularReflexion(const Rayo& rayoIncidente, const Interseccion& inter, const Escenario& escenario, const int profundidad) {
@@ -102,14 +102,14 @@ Color Mapeador::interseccion(const Rayo& rayo, const Escenario& escenario, int p
 	bool intersecta = obtenerInterseccion(rayo, escenario, inter);
 
 	if (intersecta) {
-		float luzDifusa = 0.0f;
+		Color luzDifusa = Color(0,0,0);
 		
 		//PARA CADA UNA DE LAS LUCES VOY A CALCULAR LA SOMBRA QUE SE PROYECTA
 		for (Luz* luz : escenario.luces) {
 			//BUSCO SI PROYECTANDO DESDE EL OBJETO HACIA LA LUZ ME CRUZO CON ALGUNA COSA
 			bool sombreado = estaSombreado(escenario, inter, luz);
 			//AGREGO LA ATENUACION QUE CORRESPONDA
-			luzDifusa += sombrear(luz, inter, sombreado);
+			luzDifusa = luzDifusa + sombrear(luz, inter, sombreado, rayo);
 		}
 		
 		//CALCULO LA INTENSIDAD DADA POR TODAS LAS LUCES DIFUSAS Y AMBIENTE
