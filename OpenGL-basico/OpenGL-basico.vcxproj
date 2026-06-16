@@ -58,7 +58,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>FreeImage.lib;opengl32.lib;glu32.lib;SDL2.lib;SDL2main.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -74,12 +74,13 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>FreeImage.lib;opengl32.lib;glu32.lib;SDL2.lib;SDL2main.lib;legacy_stdio_definitions.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\main.cpp" />
+    <ClCompile Include="..\src\CargadorXML.cpp" />
     <ClCompile Include="..\src\Escenario.cpp" />
     <ClCompile Include="..\src\Esfera.cpp" />
     <ClCompile Include="..\src\Luz.cpp" />
@@ -88,8 +89,10 @@
     <ClCompile Include="..\src\Plano.cpp" />
     <ClCompile Include="..\src\Rayo.cpp" />
     <ClCompile Include="..\src\Vector3D.cpp" />
+    <ClCompile Include="..\tinyxml2\tinyxml2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\headers\CargadorXML.h" />
     <ClInclude Include="..\headers\Color.h" />
     <ClInclude Include="..\headers\Escenario.h" />
     <ClInclude Include="..\headers\Esfera.h" />
@@ -101,6 +104,7 @@
     <ClInclude Include="..\headers\Plano.h" />
     <ClInclude Include="..\headers\Rayo.h" />
     <ClInclude Include="..\headers\Vector3D.h" />
+    <ClInclude Include="..\tinyxml2\tinyxml2.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

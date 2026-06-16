@@ -9,6 +9,11 @@ Escenario::~Escenario() {
 		delete objeto;
 	}
 	objetos.clear();
+
+	for (Luz* luz : luces) {
+		delete luz;
+	}
+	luces.clear();
 }
 
 void Escenario::crearEsfera(const Vector3D& centro, float radio, const Material& material) {

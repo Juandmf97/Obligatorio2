@@ -91,11 +91,18 @@ Color Mapeador::calcularReflexion(const Rayo& rayoIncidente, const Interseccion&
 }
 
 Color Mapeador::calcularRefraccion(const Rayo& rayoIncidente, const Interseccion& inter, const Escenario& escenario, const int profundidad) {
+	float kRfr = inter.objetoIntersectado->material.kRefraccion;
+	float indiceRefraccion = inter.objetoIntersectado->material.nRefraccion;
+
+	if (kRfr <= 0.0f || indiceRefraccion <= 0.0f) {
+		return Color(0, 0, 0);
+	}
+
 	Vector3D I = rayoIncidente.direccion.normalizado();
 	Vector3D N = inter.normal;
 
 	float n1 = 1.0f;
-	float n2 = inter.objetoIntersectado->material.nRefraccion;
+	float n2 = indiceRefraccion;
 	float coseno = I * N;
 	if (coseno > 0.0f) {
 		float n0 = n1;
@@ -109,7 +116,7 @@ Color Mapeador::calcularRefraccion(const Rayo& rayoIncidente, const Interseccion
 	float factor = n1 / n2;
 	float nuevoCosenoCuadrado = 1 - factor * factor * (1 - coseno * coseno);
 	if (nuevoCosenoCuadrado < 0) {
-		return Color(1, 0, 0);
+		return calcularReflexion(rayoIncidente, inter, escenario, profundidad);
 	}
 	float nuevoCoseno = sqrt(nuevoCosenoCuadrado);
 	Vector3D direccionRefraccion = (I * factor + N * (factor * coseno - nuevoCoseno)).normalizado();

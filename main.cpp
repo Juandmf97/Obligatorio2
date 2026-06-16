@@ -1,29 +1,24 @@
-#include "SDL.h"
-#include "SDL_opengl.h"
 #include <iostream>
-#include "FreeImage.h"
-#include <stdio.h>
-#include <conio.h>
-#include <GL/glu.h>
 #include <fstream>
 
-#include "../headers/Escenario.h"
-#include "../headers/Color.h"
-#include "../headers/Mapeador.h"
+#include "headers/CargadorXML.h"
+#include "headers/Escenario.h"
+#include "headers/Color.h"
+#include "headers/Mapeador.h"
 
 using namespace std;
 
-void render(const Escenario& escenario)
+void render(const Escenario& escenario, const ConfigRender& config)
 {
-	int ancho = 800;
-	int alto = 600;
+	int ancho = config.ancho;
+	int alto = config.alto;
 	float ratio = (float)ancho / (float)alto;
 
-	std::ofstream file("C:\\Users\\Usuario\\Desktop\\imagen.ppm");
+	std::ofstream file(config.salida);
 
 	file << "P3\n" << ancho << " " << alto << "\n255\n";
 
-	Vector3D origen(0, 0, 0);
+	Vector3D origen = config.camaraOrigen;
 
 	for (int y = alto - 1; y >= 0; y--)
 	{
@@ -32,7 +27,7 @@ void render(const Escenario& escenario)
 			float u = ((2.0f * x / ancho) - 1.0f) * ratio;
 			float v = (2.0f * y / alto) - 1.0f;
 
-			Vector3D dir(u, v, -1);
+			Vector3D dir(u, v, -config.distanciaPlano);
 			dir = dir.normalizado();
 
 			Rayo rayo(origen, dir);
@@ -52,25 +47,13 @@ void render(const Escenario& escenario)
 
 int main(int argc, char *argv[]) {
 	Escenario escena;
+	ConfigRender config;
+	std::string rutaEscena = argc > 1 ? argv[1] : "escena.xml";
 
-	Material yesoGris(Color(0.5, 0.5, 0.5), 1, 1, 0, 0, 0, 0, 0);
-	Material yesoAzul(Color(0, 0, 1), 0.5, 0.5, 0.5, 0, 0, 0, 0);
-	Material yesoRojo(Color(0.8, 0, 0), 1, 1, 0, 0, 0, 0, 0);
-	Material esfera1(Color(0, 0.6, 0), 1, 1, 0, 0, 0.3, 20, 0);
-	Material esfera2(Color(0.5, 0.4, 0.8), 1, 1, 0.8, 0, 0, 0, 0);
-	Material esfera3(Color(0.5, 0.5, 0.5), 1, 1, 0, 0.9, 0, 0, 2);
+	if (!CargadorXML::cargar(rutaEscena, escena, config)) {
+		return 1;
+	}
 
-	escena.crearEsfera(Vector3D(0, 0, -5), 1.0f, esfera1);
-	escena.crearEsfera(Vector3D(1, 0.6, -3), 0.5f, esfera2);
-	escena.crearEsfera(Vector3D(0.15, 0.15, -2), 0.1f, esfera3);
-	escena.agregarLuz(PUNTUAL, Vector3D(-1, 1, 0), Vector3D(0, 0, -1), Color(1, 1, 1), 1);
-	escena.crearPlano(Vector3D(0, -1, 0), Vector3D(0, 1, 0), yesoGris);
-	escena.crearPlano(Vector3D(0, 0, -10), Vector3D(0, 0, 1), yesoRojo);
-	escena.crearPlano(Vector3D(5, 0, 0), Vector3D(-1, 0, 0), yesoAzul);
-	escena.crearPlano(Vector3D(-5, 0, 0), Vector3D(1, 0, 0), yesoAzul);
-	escena.crearPlano(Vector3D(0, 5, 0), Vector3D(0, -1, 0), yesoGris);
-	escena.crearEsfera(Vector3D(-1, 0.8, -3), 0.25f, esfera2);
-
-	render(escena);
+	render(escena, config);
 	return 0;
 }
