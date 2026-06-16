@@ -19,7 +19,11 @@ void render(const Escenario& escenario)
 	int alto = 600;
 	float ratio = (float)ancho / (float)alto;
 
-	std::ofstream file("C:\\Users\\Usuario\\Desktop\\imagen.ppm");
+	std::ofstream file("imagen.ppm");
+	if (!file.is_open()) {
+		std::cerr << "ERROR: No se pudo crear o abrir el archivo de salida." << std::endl;
+		return;
+	}
 
 	file << "P3\n" << ancho << " " << alto << "\n255\n";
 
