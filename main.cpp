@@ -64,9 +64,10 @@ int main(int argc, char *argv[]) {
 	Material esfera2(Color(0.5, 0.4, 0.8), 1, 1, 0.8, 0, 0, 0, 0);
 	Material esfera3(Color(0.5, 0.5, 0.5), 1, 1, 0, 0.9, 0, 0, 2);
 
-	escena.crearEsfera(Vector3D(0, 0, -5), 1.0f, esfera1);
+	//escena.crearEsfera(Vector3D(0, 0, -5), 1.0f, esfera1);
 	escena.crearEsfera(Vector3D(1, 0.6, -3), 0.5f, esfera2);
 	escena.crearEsfera(Vector3D(0.15, 0.15, -2), 0.1f, esfera3);
+	escena.crearCilindro(Vector3D(0, -1, -2), .2f, 1.0f, esfera1);
 	escena.agregarLuz(PUNTUAL, Vector3D(-1, 1, 0), Vector3D(0, 0, -1), Color(1, 1, 1), 1);
 	escena.crearPlano(Vector3D(0, -1, 0), Vector3D(0, 1, 0), yesoGris);
 	escena.crearPlano(Vector3D(0, 0, -10), Vector3D(0, 0, 1), yesoRojo);

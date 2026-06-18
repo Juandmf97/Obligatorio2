@@ -80,6 +80,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\main.cpp" />
+    <ClCompile Include="..\src\Cilindro.cpp" />
     <ClCompile Include="..\src\Escenario.cpp" />
     <ClCompile Include="..\src\Esfera.cpp" />
     <ClCompile Include="..\src\Luz.cpp" />
@@ -90,6 +91,7 @@
     <ClCompile Include="..\src\Vector3D.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\headers\Cilindro.h" />
     <ClInclude Include="..\headers\Color.h" />
     <ClInclude Include="..\headers\Escenario.h" />
     <ClInclude Include="..\headers\Esfera.h" />
