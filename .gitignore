@@ -1,7 +1,9 @@
 .vs/
 Debug/
 Release/
+*.user
 *.obj
 *.exe
 *.pdb
 *.log
+*.ppm

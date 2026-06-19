@@ -30,43 +30,57 @@ bool Mapeador::obtenerInterseccion(const Rayo& rayo, const Escenario& escenario,
 	return true;
 }
 
-bool Mapeador::estaSombreado(const Escenario& escenario, const Interseccion& inter, const Luz* luz) {
+Color Mapeador::calcularLuzTransmitida(const Escenario& escenario, const Interseccion& inter, const Luz* luz) {
 	Vector3D L = luz->obtenerDireccion(inter.puntoInterseccion) * -1;
 	float d = luz->obtenerDistancia(inter.puntoInterseccion);
 	Rayo sombra(inter.puntoInterseccion + inter.normal * 0.0001f, L);
-	bool sombreado = false;
+	Color luzTransmitida(1, 1, 1);
 
 	for (Objeto* objeto : escenario.objetos) {
 		float alfa;
 		if (objeto != inter.objetoIntersectado && objeto->intersecta(sombra, alfa) && alfa > 0.0f && alfa < d) {
-			sombreado = true;
-			break;
+			float kRefraccion = objeto->material.kRefraccion;
+			if (kRefraccion <= 0.0f) {
+				return Color(0, 0, 0);
+			}
+
+			luzTransmitida = Color(
+				luzTransmitida.r * objeto->material.color.r * kRefraccion,
+				luzTransmitida.g * objeto->material.color.g * kRefraccion,
+				luzTransmitida.b * objeto->material.color.b * kRefraccion
+			);
 		}
 	}
 
-	return sombreado;
+	return luzTransmitida;
 }
 
-Color Mapeador::sombrear(const Luz* luz, const Interseccion& inter, const bool sombreado, const Rayo& rayoIncidente) {
-	Color luzDifusa;
-	Color luzPhong;
-	Color luzDifusaYPhong;
-	if (!sombreado) {
-		Vector3D L = luz->obtenerDireccion(inter.puntoInterseccion) * -1;
-		Vector3D R = L - (inter.normal * 2.0f) * (L * inter.normal);
-		R = (R* (-1.0f)).normalizado();
-		Vector3D V = (rayoIncidente.direccion * -1).normalizado();
-		float distancia = luz->obtenerDistancia(inter.puntoInterseccion);
-		float factorAtenuacion = atenuar(distancia);
-		luzDifusa = inter.objetoIntersectado->material.color * std::fmax(0.0f,inter.normal * L) * inter.objetoIntersectado->material.kDifusa;
-		luzPhong = luz->color * pow(std::fmax(0.0f, R * V), inter.objetoIntersectado->material.nPhong);
-		luzPhong = luzPhong * inter.objetoIntersectado->material.kEspecular;
-		luzDifusaYPhong =  (luzDifusa + luzPhong) * factorAtenuacion;
-	}
+Color Mapeador::sombrear(const Luz* luz, const Interseccion& inter, const Color& luzTransmitida, const Rayo& rayoIncidente) {
+	Vector3D L = luz->obtenerDireccion(inter.puntoInterseccion) * -1;
+	Vector3D R = L - (inter.normal * 2.0f) * (L * inter.normal);
+	R = (R* (-1.0f)).normalizado();
+	Vector3D V = (rayoIncidente.direccion * -1).normalizado();
+	float distancia = luz->obtenerDistancia(inter.puntoInterseccion);
+	float factorAtenuacion = atenuar(distancia);
+	float factorDifuso = std::fmax(0.0f, inter.normal * L) * inter.objetoIntersectado->material.kDifusa;
+	float factorPhong = pow(std::fmax(0.0f, R * V), inter.objetoIntersectado->material.nPhong) * inter.objetoIntersectado->material.kEspecular;
+	Color colorLuz = luz->color * luz->intensidad;
 
-	return luzDifusaYPhong;
+	Color luzDifusa(
+		inter.objetoIntersectado->material.color.r * colorLuz.r * factorDifuso,
+		inter.objetoIntersectado->material.color.g * colorLuz.g * factorDifuso,
+		inter.objetoIntersectado->material.color.b * colorLuz.b * factorDifuso
+	);
+
+	Color luzPhong = colorLuz * factorPhong;
+	Color luzTotal = (luzDifusa + luzPhong) * factorAtenuacion;
+
+	return Color(
+		luzTotal.r * luzTransmitida.r,
+		luzTotal.g * luzTransmitida.g,
+		luzTotal.b * luzTransmitida.b
+	);
 }
-
 Color Mapeador::calcularIluminacion(const Color& luzDifusa, const Interseccion& inter, const Escenario& escenario) {
 	float intensidadAmbiente = escenario.luzAmbiente;
 	Color luzAmbiente = inter.objetoIntersectado->material.color * inter.objetoIntersectado->material.kAmbiente * intensidadAmbiente;
@@ -144,9 +158,9 @@ Color Mapeador::interseccion(const Rayo& rayo, const Escenario& escenario, int p
 		//PARA CADA UNA DE LAS LUCES VOY A CALCULAR LA SOMBRA QUE SE PROYECTA
 		for (Luz* luz : escenario.luces) {
 			//BUSCO SI PROYECTANDO DESDE EL OBJETO HACIA LA LUZ ME CRUZO CON ALGUNA COSA
-			bool sombreado = estaSombreado(escenario, inter, luz);
+			Color luzTransmitida = calcularLuzTransmitida(escenario, inter, luz);
 			//AGREGO LA ATENUACION QUE CORRESPONDA
-			luzDifusa = luzDifusa + sombrear(luz, inter, sombreado, rayo);
+			luzDifusa = luzDifusa + sombrear(luz, inter, luzTransmitida, rayo);
 		}
 		
 		//CALCULO LA INTENSIDAD DADA POR TODAS LAS LUCES DIFUSAS Y AMBIENTE
