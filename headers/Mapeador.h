@@ -9,8 +9,8 @@ class Mapeador {
 public :
 	float atenuar(float d);
 	bool obtenerInterseccion(const Rayo& rayo, const Escenario& escenario, Interseccion& inter);
-	bool estaSombreado(const Escenario& escenario, const Interseccion& inter, const Luz* luz);
-	Color sombrear(const Luz* luz, const Interseccion& inter, const bool sombreado, const Rayo& rayoIncidente);
+	Color calcularLuzTransmitida(const Escenario& escenario, const Interseccion& inter, const Luz* luz);
+	Color sombrear(const Luz* luz, const Interseccion& inter, const Color& luzTransmitida, const Rayo& rayoIncidente);
 	Color calcularIluminacion(const Color& luzDifusa, const Interseccion& inter, const Escenario& escenario);
 	Color calcularReflexion(const Rayo& rayoIncidente, const Interseccion& inter, const Escenario& escenario, const int profundidad, const bool TIR);
 	Color calcularRefraccion(const Rayo& rayoIncidente, const Interseccion& inter, const Escenario& escenario, const int profundidad);

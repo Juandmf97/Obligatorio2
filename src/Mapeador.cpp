@@ -38,17 +38,13 @@ bool Mapeador::obtenerInterseccion(const Rayo& rayo, const Escenario& escenario,
 	return true;
 }
 
-//REVISADA OK
-//Mejoras : Cuando hago la sombra habría que ver bien porque si hay por ejemplo una secuencia 
-//LUZ-OBJETO OPACO-OBJETO VIDRIOSO COLORIDO-OBJETO. Puedo quedarme con la sombra coloreada del vidrio
-//Por meter el break apenas lo encuentra.
-bool Mapeador::estaSombreado(const Escenario& escenario, const Interseccion& inter, const Luz* luz) {
+Color Mapeador::calcularLuzTransmitida(const Escenario& escenario, const Interseccion& inter, const Luz* luz) {
 	//Obtengo la direccion del vector que parte desde el objeto hacia la luz
 	Vector3D L = luz->obtenerDireccion(inter.puntoInterseccion) * -1;
 	float d = luz->obtenerDistancia(inter.puntoInterseccion);
 	//Creo un rayo que parte desde el punto de Interseccion y va hacia la luz
 	Rayo sombra(inter.puntoInterseccion + inter.normal * 0.0001f, L);
-	bool sombreado = false;
+	Color luzTransmitida(1, 1, 1);
 
 	//Recorro todos los objetos
 	for (Objeto* objeto : escenario.objetos) {
@@ -56,51 +52,55 @@ bool Mapeador::estaSombreado(const Escenario& escenario, const Interseccion& int
 		//Para todos los objetos que no sean el propio intersectado si el objeto se intersecta con el rayo sombra
 		//O sea si se encuentra con un objeto en el camino entre él y la luz 
 		if (objeto != inter.objetoIntersectado && objeto->intersecta(sombra, alfa) && alfa > 0.0f && alfa < d) {
-			//Considero que el objeto está sombreado y paro de buscar
-			sombreado = true;
-			break;
+			float kRefraccion = objeto->material.kRefraccion;
+			if (kRefraccion <= 0.0f) {
+				return Color(0, 0, 0);
+			}
+
+			luzTransmitida = Color(
+				luzTransmitida.r * objeto->material.color.r * kRefraccion,
+				luzTransmitida.g * objeto->material.color.g * kRefraccion,
+				luzTransmitida.b * objeto->material.color.b * kRefraccion
+			);
 		}
 	}
-	//Si encontró algo devuelvo true sino false
-	return sombreado;
+
+	return luzTransmitida;
 }
 
-//REVISADA OK
-//Mejoras : no por ahora
-Color Mapeador::sombrear(const Luz* luz, const Interseccion& inter, const bool sombreado, const Rayo& rayoIncidente) {
-	Color luzDifusa;
-	Color luzPhong;
-	Color luzDifusaYPhong;
-	//Si no está sombreado
-	if (!sombreado) {
-		//Obtengo la direccion desde el punto de inersección hacia la luz
-		Vector3D L = luz->obtenerDireccion(inter.puntoInterseccion) * -1;
-		//Calculo vector de Reflexion
-		//L = L|| + L-|
-		//L = L|| + (L*N)N esto con N normalizado, yo estoy seguro de que está normalizado porque ya lo asegure antes
-		//L|| = L - (L*N)*N
-		//R = L|| - L-| = L - 2*(L*N)*N
-		Vector3D R = L - (inter.normal * 2.0f) * (L * inter.normal);
-		//Normalizo la direccion de la reflexión
-		R = (R* (-1.0f)).normalizado();
-		//Aca rayoIncidente se refiere al rayo que viene del ojo, entonces tomo la direccion desde el objeto al ojo
-		Vector3D V = (rayoIncidente.direccion * -1).normalizado();
-		//Calculo la distancia de la luz al punto de Interseccion y realizo la atenuacion por la distancia a la misma
-		float distancia = luz->obtenerDistancia(inter.puntoInterseccion);
-		float factorAtenuacion = atenuar(distancia);
-		//Calculo la componente difusa como el color del objeto * qué tan bien pega la luz al objeto * 
-		// la constante de absorción de luzDifusa y el color de la luz
-		luzDifusa = inter.objetoIntersectado->material.color * std::fmax(0.0f,inter.normal * L) * inter.objetoIntersectado->material.kDifusa * luz->color * luz->intensidad;
-		//Calculo la componente Phong como el color de la luz * la potencia de el máximo entre R*V y 0 
-		// elevado a el componente phong de n. Luego multiplico eso por el coeficiente de especular de Phong		
-		luzPhong = luz->color * pow(std::fmax(0.0f, R * V), inter.objetoIntersectado->material.nPhong) * luz->intensidad;
-		luzPhong = luzPhong * inter.objetoIntersectado->material.kEspecular;
-		//sumo ambas para obtener el componente de la suma de las dos y lo multiplico por un factor de atenuacion
-		//ya que ambas componentes dependen de la luz en sí
-		luzDifusaYPhong =  (luzDifusa + luzPhong) * factorAtenuacion;
-	}
+Color Mapeador::sombrear(const Luz* luz, const Interseccion& inter, const Color& luzTransmitida, const Rayo& rayoIncidente) {
+	//Obtengo la direccion desde el punto de inersección hacia la luz
+	Vector3D L = luz->obtenerDireccion(inter.puntoInterseccion) * -1;
+	//Calculo vector de Reflexion
+	//L = L|| + L-|
+	//L = L|| + (L*N)N esto con N normalizado, yo estoy seguro de que está normalizado porque ya lo asegure antes
+	//L|| = L - (L*N)*N
+	//R = L|| - L-| = L - 2*(L*N)*N
+	Vector3D R = L - (inter.normal * 2.0f) * (L * inter.normal);
+	R = (R* (-1.0f)).normalizado();
+	//Aca rayoIncidente se refiere al rayo que viene del ojo, entonces tomo la direccion desde el objeto al ojo
+	Vector3D V = (rayoIncidente.direccion * -1).normalizado();
+	float distancia = luz->obtenerDistancia(inter.puntoInterseccion);
+	//Calculo la distancia de la luz al punto de Interseccion y realizo la atenuacion por la distancia a la misma
+	float factorAtenuacion = atenuar(distancia);
+	float factorDifuso = std::fmax(0.0f, inter.normal * L) * inter.objetoIntersectado->material.kDifusa;
+	float factorPhong = pow(std::fmax(0.0f, R * V), inter.objetoIntersectado->material.nPhong) * inter.objetoIntersectado->material.kEspecular;
+	Color colorLuz = luz->color * luz->intensidad;
 
-	return luzDifusaYPhong;
+	Color luzDifusa(
+		inter.objetoIntersectado->material.color.r * colorLuz.r * factorDifuso,
+		inter.objetoIntersectado->material.color.g * colorLuz.g * factorDifuso,
+		inter.objetoIntersectado->material.color.b * colorLuz.b * factorDifuso
+	);
+
+	Color luzPhong = colorLuz * factorPhong;
+	Color luzTotal = (luzDifusa + luzPhong) * factorAtenuacion;
+
+	return Color(
+		luzTotal.r * luzTransmitida.r,
+		luzTotal.g * luzTransmitida.g,
+		luzTotal.b * luzTransmitida.b
+	);
 }
 
 //REVISADA OK
@@ -205,9 +205,9 @@ Color Mapeador::interseccion(const Rayo& rayo, const Escenario& escenario, int p
 		//PARA CADA UNA DE LAS LUCES VOY A CALCULAR LA SOMBRA QUE SE PROYECTA
 		for (Luz* luz : escenario.luces) {
 			//BUSCO SI PROYECTANDO DESDE EL OBJETO HACIA LA LUZ ME CRUZO CON ALGUNA COSA
-			bool sombreado = estaSombreado(escenario, inter, luz);
+			Color luzTransmitida = calcularLuzTransmitida(escenario, inter, luz);
 			//AGREGO LA ATENUACION QUE CORRESPONDA
-			luzDifusa = luzDifusa + sombrear(luz, inter, sombreado, rayo);
+			luzDifusa = luzDifusa + sombrear(luz, inter, luzTransmitida, rayo);
 		}
 		
 		//CALCULO LA INTENSIDAD DADA POR TODAS LAS LUCES DIFUSAS Y AMBIENTE
