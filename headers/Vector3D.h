@@ -10,6 +10,7 @@ public :
 	Vector3D operator+(const Vector3D& otro) const;
 	Vector3D operator-(const Vector3D& otro) const;
 	float operator*(const Vector3D& otro) const;
+	Vector3D productoVectorial(const Vector3D& otro) const;
 	Vector3D operator*(float escalar) const;
 	Vector3D operator/(float escalar) const;
 

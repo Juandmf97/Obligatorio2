@@ -2,6 +2,7 @@
 
 #include "Objeto.h"
 #include "Luz.h"
+#include "Malla.h"
 
 #include <vector>
 
@@ -18,4 +19,5 @@ public :
 	void crearPlano(const Vector3D& punto, const Vector3D& normal, const Material& material);
 	void agregarLuz(TipoLuz tipo, const Vector3D& origen, const Vector3D& direccion, const Color& color, float intensidad);
 	void crearCilindro(const Vector3D& centro, float radio, float altura, const Material& material);
+	void crearMalla(const std::vector<Vector3D>& vertices, const std::vector<CaraTriangular>& caras, const Material& material);
 };

@@ -86,10 +86,12 @@
     <ClCompile Include="..\src\Esfera.cpp" />
     <ClCompile Include="..\src\Luz.cpp" />
     <ClCompile Include="..\src\Mapeador.cpp" />
+    <ClCompile Include="..\src\Malla.cpp" />
     <ClCompile Include="..\src\Material.cpp" />
     <ClCompile Include="..\src\Plano.cpp" />
     <ClCompile Include="..\src\Rayo.cpp" />
     <ClCompile Include="..\src\Renderizador.cpp" />
+    <ClCompile Include="..\src\Triangulo.cpp" />
     <ClCompile Include="..\src\Vector3D.cpp" />
     <ClCompile Include="..\tinyxml2\tinyxml2.cpp" />
   </ItemGroup>
@@ -102,11 +104,13 @@
     <ClInclude Include="..\headers\Interseccion.h" />
     <ClInclude Include="..\headers\Luz.h" />
     <ClInclude Include="..\headers\Mapeador.h" />
+    <ClInclude Include="..\headers\Malla.h" />
     <ClInclude Include="..\headers\Material.h" />
     <ClInclude Include="..\headers\Objeto.h" />
     <ClInclude Include="..\headers\Plano.h" />
     <ClInclude Include="..\headers\Rayo.h" />
     <ClInclude Include="..\headers\Renderizador.h" />
+    <ClInclude Include="..\headers\Triangulo.h" />
     <ClInclude Include="..\headers\Vector3D.h" />
     <ClInclude Include="..\tinyxml2\tinyxml2.h" />
   </ItemGroup>

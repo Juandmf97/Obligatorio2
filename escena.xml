@@ -1,22 +1,86 @@
-<escena luzAmbiente="0.1">
+<escena luzAmbiente="0.12">
   <render ancho="800" alto="600" salida="imagen.ppm" />
-  <camara origen="0 0 0" distanciaPlano="1" />
+  <camara origen="0 0.15 0" distanciaPlano="1" />
 
-	<material id="plasticoVerde" r ="0.1" g="0.4" b="0.0" ka="1" kd="1" kr="0" kt="0" ks="0" phong="0.2" ior="1"/>
-  <material id="yesoGris" r="0.5" g="0.5" b="0.5" ka="1" kd="1" kr="0" kt="0" ks="0" phong="1" ior="1" />
-  <material id="yesoAzul" r="0" g="0" b="1" ka="0.5" kd="0.5" kr="0.5" kt="0" ks="0" phong="1" ior="1" />
-  <material id="yesoRojo" r="0.8" g="0" b="0" ka="1" kd="1" kr="0" kt="0" ks="0" phong="1" ior="1" />
-  <material id="espejo" r="0.7" g="0.7" b="0.7" ka="0.2" kd="0.2" kr="0.9" kt="0" ks="0.8" phong="80" ior="1" />
-  <material id="vidrioRojoTenue" r="0.9" g="0.25" b="0.25" ka="0.2" kd="0.4" kr="0" kt="0.75" ks="0.2" phong="20" ior="1.5" />
+  <material id="plasticoVerde" r="0.08" g="0.45" b="0.06" ka="0.8" kd="0.9" kr="0" kt="0" ks="0.05" phong="8" ior="1" />
+  <material id="yesoGris" r="0.55" g="0.55" b="0.55" ka="0.8" kd="0.85" kr="0" kt="0" ks="0.05" phong="8" ior="1" />
+  <material id="yesoBlanco" r="0.95" g="0.95" b="0.92" ka="0.9" kd="0.9" kr="0" kt="0" ks="0.05" phong="8" ior="1" />
+  <material id="yesoRojo" r="0.8" g="0.02" b="0.0" ka="0.9" kd="0.9" kr="0" kt="0" ks="0" phong="1" ior="1" />
+  <material id="espejo" r="0.7" g="0.7" b="0.7" ka="0.1" kd="0.15" kr="0.9" kt="0" ks="0.9" phong="90" ior="1" />
+  <material id="vidrioRojoTenue" r="0.9" g="0.35" b="0.35" ka="0.15" kd="0.35" kr="0" kt="0.75" ks="0.25" phong="30" ior="1.5" />
 
-  <luz tipo="puntual" origen="-1 1 0" direccion="0 0 -1" r="1" g="1" b="1" intensidad="1" />
+  <luz tipo="puntual" origen="0 1.85 -2.7" direccion="0 -1 0" r="1" g="1" b="1" intensidad="1.15" />
+  <luz tipo="puntual" origen="0 0.55 0.0" direccion="0 -1 0" r="1" g="1" b="1" intensidad="1" />
 
-  <cilindro centro="0 -1 -3.8" radio="0.45" altura="2" material="plasticoVerde" />
-  <esfera centro="1 0.45 -3.2" radio="0.55" material="espejo" />
-  <esfera centro="-0.9 0.15 -3.3" radio="0.55" material="vidrioRojoTenue" />
-  <plano punto="0 -1 0" normal="0 1 0" material="yesoGris" />
-  <plano punto="0 0 -10" normal="0 0 1" material="yesoRojo" />
-  <plano punto="5 0 0" normal="-1 0 0" material="plasticoVerde" />
-  <plano punto="-5 0 0" normal="1 0 0" material="yesoAzul" />
-  <plano punto="0 5 0" normal="0 -1 0" material="yesoGris" />
+  <malla material="yesoGris">
+    <vertice p="-1.75 -1.0 -2.35" />
+    <vertice p="1.75 -1.0 -2.35" />
+    <vertice p="1.75 -1.0 -4.65" />
+    <vertice p="-1.75 -1.0 -4.65" />
+    <vertice p="-1.75 -0.25 -2.35" />
+    <vertice p="1.75 -0.25 -2.35" />
+    <vertice p="1.75 -0.25 -4.65" />
+    <vertice p="-1.75 -0.25 -4.65" />
+    <cara a="0" b="1" c="5" />
+    <cara a="0" b="5" c="4" />
+    <cara a="1" b="2" c="6" />
+    <cara a="1" b="6" c="5" />
+    <cara a="2" b="3" c="7" />
+    <cara a="2" b="7" c="6" />
+    <cara a="3" b="0" c="4" />
+    <cara a="3" b="4" c="7" />
+    <cara a="4" b="5" c="6" />
+    <cara a="4" b="6" c="7" />
+    <cara a="0" b="3" c="2" />
+    <cara a="0" b="2" c="1" />
+  </malla>
+
+  <esfera centro="-0.9 0.43 -3.6" radio="0.68" material="vidrioRojoTenue" />
+  <cilindro centro="-0.45 -0.25 -3.48" radio="0.38" altura="0.95" material="plasticoVerde" />
+  <esfera centro="1.05 0.17 -3.25" radio="0.42" material="espejo" />
+
+  <malla material="yesoBlanco">
+    <vertice p="-2.7 -1 -0.05" />
+    <vertice p="2.7 -1 -0.05" />
+    <vertice p="2.7 -1 -5.4" />
+    <vertice p="-2.7 -1 -5.4" />
+    <cara a="0" b="1" c="2" />
+    <cara a="0" b="2" c="3" />
+  </malla>
+
+  <malla material="yesoBlanco">
+    <vertice p="-2.7 -1 -5.4" />
+    <vertice p="2.7 -1 -5.4" />
+    <vertice p="2.7 2.1 -5.4" />
+    <vertice p="-2.7 2.1 -5.4" />
+    <cara a="0" b="1" c="2" />
+    <cara a="0" b="2" c="3" />
+  </malla>
+
+  <malla material="plasticoVerde">
+    <vertice p="2.7 -1 -0.05" />
+    <vertice p="2.7 2.1 -0.05" />
+    <vertice p="2.7 2.1 -5.4" />
+    <vertice p="2.7 -1 -5.4" />
+    <cara a="0" b="1" c="2" />
+    <cara a="0" b="2" c="3" />
+  </malla>
+
+  <malla material="yesoRojo">
+    <vertice p="-2.7 -1 -0.05" />
+    <vertice p="-2.7 -1 -5.4" />
+    <vertice p="-2.7 2.1 -5.4" />
+    <vertice p="-2.7 2.1 -0.05" />
+    <cara a="0" b="1" c="2" />
+    <cara a="0" b="2" c="3" />
+  </malla>
+
+  <malla material="yesoGris">
+    <vertice p="-2.7 2.1 -0.05" />
+    <vertice p="-2.7 2.1 -5.4" />
+    <vertice p="2.7 2.1 -5.4" />
+    <vertice p="2.7 2.1 -0.05" />
+    <cara a="0" b="1" c="2" />
+    <cara a="0" b="2" c="3" />
+  </malla>
 </escena>

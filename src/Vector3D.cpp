@@ -18,6 +18,14 @@ float Vector3D::operator*(const Vector3D& otro) const {
 	return x * otro.x + y * otro.y + z * otro.z;
 }
 
+Vector3D Vector3D::productoVectorial(const Vector3D& otro) const {
+	return Vector3D(
+		y * otro.z - z * otro.y,
+		z * otro.x - x * otro.z,
+		x * otro.y - y * otro.x
+	);
+}
+
 Vector3D Vector3D::operator*(float escalar) const {
 	return Vector3D(x * escalar, y * escalar, z * escalar);
 }

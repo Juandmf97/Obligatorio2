@@ -1,11 +1,13 @@
 #include "../headers/CargadorXML.h"
 
 #include "../headers/Material.h"
+#include "../headers/Malla.h"
 #include "../tinyxml2/tinyxml2.h"
 
 #include <iostream>
 #include <map>
 #include <sstream>
+#include <vector>
 
 namespace {
 	float obtenerFloat(const tinyxml2::XMLElement* elemento, const char* nombre, float valorPorDefecto) {
@@ -170,6 +172,46 @@ bool CargadorXML::cargar(const std::string& ruta, Escenario& escenario, ConfigRe
 			obtenerFloat(elemento, "altura", 1.0f),
 			material
 		);
+	}
+
+	for (tinyxml2::XMLElement* elemento = raiz->FirstChildElement("malla"); elemento != nullptr; elemento = elemento->NextSiblingElement("malla")) {
+		std::string idMaterial = obtenerTexto(elemento, "material");
+		Material material;
+
+		if (!buscarMaterial(materiales, idMaterial, material)) {
+			std::cerr << "No existe el material de malla: " << idMaterial << std::endl;
+			return false;
+		}
+
+		std::vector<Vector3D> vertices;
+		std::vector<CaraTriangular> caras;
+
+		for (tinyxml2::XMLElement* vertice = elemento->FirstChildElement("vertice"); vertice != nullptr; vertice = vertice->NextSiblingElement("vertice")) {
+			vertices.push_back(obtenerVector(vertice, "p", obtenerVector(vertice, "posicion")));
+		}
+
+		for (tinyxml2::XMLElement* cara = elemento->FirstChildElement("cara"); cara != nullptr; cara = cara->NextSiblingElement("cara")) {
+			caras.push_back(CaraTriangular(
+				obtenerInt(cara, "a", 0),
+				obtenerInt(cara, "b", 0),
+				obtenerInt(cara, "c", 0)
+			));
+		}
+
+		for (tinyxml2::XMLElement* triangulo = elemento->FirstChildElement("triangulo"); triangulo != nullptr; triangulo = triangulo->NextSiblingElement("triangulo")) {
+			caras.push_back(CaraTriangular(
+				obtenerInt(triangulo, "a", 0),
+				obtenerInt(triangulo, "b", 0),
+				obtenerInt(triangulo, "c", 0)
+			));
+		}
+
+		if (vertices.empty() || caras.empty()) {
+			std::cerr << "Malla sin vertices o caras." << std::endl;
+			return false;
+		}
+
+		escenario.crearMalla(vertices, caras, material);
 	}
 
 	for (tinyxml2::XMLElement* elemento = raiz->FirstChildElement("plano"); elemento != nullptr; elemento = elemento->NextSiblingElement("plano")) {

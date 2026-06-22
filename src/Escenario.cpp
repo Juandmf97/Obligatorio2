@@ -2,6 +2,7 @@
 #include "../headers/Esfera.h"
 #include "../headers/Plano.h"
 #include "../headers/Cilindro.h"
+#include "../headers/Malla.h"
 
 Escenario::Escenario() {}
 
@@ -36,3 +37,9 @@ void Escenario::crearCilindro(const Vector3D& centro, float radio, float altura,
 	Objeto* cilindro = new Cilindro(centro, radio, altura, material);
 	objetos.push_back(cilindro);
 }
+
+void Escenario::crearMalla(const std::vector<Vector3D>& vertices, const std::vector<CaraTriangular>& caras, const Material& material) {
+	Objeto* malla = new Malla(vertices, caras, material);
+	objetos.push_back(malla);
+}
+
