@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -81,6 +81,7 @@
   <ItemGroup>
     <ClCompile Include="..\main.cpp" />
     <ClCompile Include="..\src\CargadorXML.cpp" />
+    <ClCompile Include="..\src\Cilindro.cpp" />
     <ClCompile Include="..\src\Escenario.cpp" />
     <ClCompile Include="..\src\Esfera.cpp" />
     <ClCompile Include="..\src\Luz.cpp" />
@@ -94,6 +95,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\CargadorXML.h" />
+    <ClInclude Include="..\headers\Cilindro.h" />
     <ClInclude Include="..\headers\Color.h" />
     <ClInclude Include="..\headers\Escenario.h" />
     <ClInclude Include="..\headers\Esfera.h" />

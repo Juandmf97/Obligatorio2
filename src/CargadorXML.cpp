@@ -155,6 +155,23 @@ bool CargadorXML::cargar(const std::string& ruta, Escenario& escenario, ConfigRe
 		);
 	}
 
+	for (tinyxml2::XMLElement* elemento = raiz->FirstChildElement("cilindro"); elemento != nullptr; elemento = elemento->NextSiblingElement("cilindro")) {
+		std::string idMaterial = obtenerTexto(elemento, "material");
+		Material material;
+
+		if (!buscarMaterial(materiales, idMaterial, material)) {
+			std::cerr << "No existe el material de cilindro: " << idMaterial << std::endl;
+			return false;
+		}
+
+		escenario.crearCilindro(
+			obtenerVector(elemento, "centro"),
+			obtenerFloat(elemento, "radio", 1.0f),
+			obtenerFloat(elemento, "altura", 1.0f),
+			material
+		);
+	}
+
 	for (tinyxml2::XMLElement* elemento = raiz->FirstChildElement("plano"); elemento != nullptr; elemento = elemento->NextSiblingElement("plano")) {
 		std::string idMaterial = obtenerTexto(elemento, "material");
 		Material material;
