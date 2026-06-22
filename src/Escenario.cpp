@@ -1,6 +1,7 @@
 #include "../headers/Escenario.h"
 #include "../headers/Esfera.h"
 #include "../headers/Plano.h"
+#include "../headers/Cilindro.h"
 
 Escenario::Escenario() {}
 
@@ -29,4 +30,9 @@ void Escenario::crearPlano(const Vector3D& punto, const Vector3D& normal, const 
 void Escenario::agregarLuz(TipoLuz tipo, const Vector3D& origen, const Vector3D& direccion, const Color& color, float intensidad) {
 	Luz* luz = new Luz(tipo, origen, direccion, color, intensidad);
 	luces.push_back(luz);
+}
+
+void Escenario::crearCilindro(const Vector3D& centro, float radio, float altura, const Material& material) {
+	Objeto* cilindro = new Cilindro(centro, radio, altura, material);
+	objetos.push_back(cilindro);
 }
