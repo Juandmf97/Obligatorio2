@@ -12,7 +12,7 @@ public :
 	bool estaSombreado(const Escenario& escenario, const Interseccion& inter, const Luz* luz);
 	Color sombrear(const Luz* luz, const Interseccion& inter, const bool sombreado, const Rayo& rayoIncidente);
 	Color calcularIluminacion(const Color& luzDifusa, const Interseccion& inter, const Escenario& escenario);
-	Color calcularReflexion(const Rayo& rayoIncidente, const Interseccion& inter, const Escenario& escenario, const int profundidad);
+	Color calcularReflexion(const Rayo& rayoIncidente, const Interseccion& inter, const Escenario& escenario, const int profundidad, const bool TIR);
 	Color calcularRefraccion(const Rayo& rayoIncidente, const Interseccion& inter, const Escenario& escenario, const int profundidad);
 	Color calcularColor(const Interseccion& inter, const Color& colorReflejado, const Color& colorDifuso, const Color& colorRefractado);
 

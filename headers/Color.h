@@ -17,4 +17,8 @@ public :
 	Color operator+(const Color& otro) const {
 		return Color(std::fmin(1.0,r + otro.r), std::fmin(1.0, g + otro.g), std::fmin(1.0, b + otro.b));
 	}
+
+	Color operator*(const Color& otro) const {
+		return Color(r * otro.r, g * otro.g, b * otro.b);
+	}
 };
