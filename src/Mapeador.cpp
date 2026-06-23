@@ -223,6 +223,6 @@ Color Mapeador::interseccion(const Rayo& rayo, const Escenario& escenario, int p
 		return colorFinal;
 	}
 
-	return Color(0.0f, 0.0f, 1.0f);
+	return Color(0.0f, 0.0f, 0.0f);
 }
 

@@ -48,14 +48,7 @@
     <cara a="0" b="2" c="3" />
   </malla>
 
-  <malla material="yesoBlanco">
-    <vertice p="-2.7 -1 -5.4" />
-    <vertice p="2.7 -1 -5.4" />
-    <vertice p="2.7 2.1 -5.4" />
-    <vertice p="-2.7 2.1 -5.4" />
-    <cara a="0" b="1" c="2" />
-    <cara a="0" b="2" c="3" />
-  </malla>
+  <plano punto="0 0 -5.4" normal="0 0 1" material="yesoBlanco" />
 
   <malla material="plasticoVerde">
     <vertice p="2.7 -1 -0.05" />
