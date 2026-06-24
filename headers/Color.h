@@ -11,11 +11,11 @@ public :
 	Color(float red, float green, float blue) : r(red), g(green), b(blue) {}
 
 	Color operator*(float k) const {
-		return Color(std::fmin(1.0, r * k), std::fmin(1.0, g * k), std::fmin(1.0, b * k));
+		return Color(std::fmin(1.0f, r * k), std::fmin(1.0f, g * k), std::fmin(1.0f, b * k));
 	}
 
 	Color operator+(const Color& otro) const {
-		return Color(std::fmin(1.0,r + otro.r), std::fmin(1.0, g + otro.g), std::fmin(1.0, b + otro.b));
+		return Color(std::fmin(1.0f,r + otro.r), std::fmin(1.0f, g + otro.g), std::fmin(1.0f, b + otro.b));
 	}
 
 	Color operator*(const Color& otro) const {
