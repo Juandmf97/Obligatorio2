@@ -171,5 +171,22 @@ bool CargadorXML::cargar(const std::string& ruta, Escenario& escenario, ConfigRe
 		);
 	}
 
+
+	for (tinyxml2::XMLElement* elemento = raiz->FirstChildElement("prisma"); elemento != nullptr; elemento = elemento->NextSiblingElement("prisma")) {
+		std::string idMaterial = obtenerTexto(elemento, "material");
+		Material material;
+
+		if (!buscarMaterial(materiales, idMaterial, material)) {
+			std::cerr << "No existe el material de prisma: " << idMaterial << std::endl;
+			return false;
+		}
+
+		escenario.crearPlano(
+			obtenerVector(elemento, "punto1"),
+			obtenerVector(elemento, "punto2"),
+			material
+		);
+	}
+
 	return true;
 }

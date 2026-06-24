@@ -12,6 +12,7 @@ public :
 	float operator*(const Vector3D& otro) const;
 	Vector3D operator*(float escalar) const;
 	Vector3D operator/(float escalar) const;
+	Vector3D cruz(const Vector3D& otro) const;
 
 	void operator+=(const Vector3D& otro);
 	void operator-=(const Vector3D& otro);

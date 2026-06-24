@@ -29,6 +29,10 @@ Vector3D Vector3D::operator/(float escalar) const {
 	return Vector3D(x / escalar, y / escalar, z / escalar);
 }
 
+Vector3D Vector3D::cruz(const Vector3D& otro) const {
+	return Vector3D(y * otro.z - z * otro.y, z * otro.x - x * otro.z, x * otro.y - y * otro.x);
+}
+
 void Vector3D::operator+=(const Vector3D& otro) {
 	x += otro.x;
 	y += otro.y;

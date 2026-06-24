@@ -4,14 +4,17 @@ Plano::Plano() {}
 
 Plano::Plano(const Vector3D& p, const Vector3D& n, const Material& mat) : Objeto(mat), punto(p), direccionNormal(n) {}
 
-bool Plano::intersecta(const Rayo& rayo, float& alfa) const {
-	alfa = 0.0f;
+bool Plano::intersecta(const Rayo& rayo, Interseccion& inter) {
+	inter.alfa = 0.0f;
 	float divisor = direccionNormal * rayo.direccion;
 	if (divisor == 0.0f) {
 		return false;
 	}
-	alfa = ((punto - rayo.origen) * direccionNormal) / divisor;
-	if (alfa > 0.0f) {
+	inter.alfa = ((punto - rayo.origen) * direccionNormal) / divisor;
+	if (inter.alfa > 0.0f) {
+		inter.objetoIntersectado = this;
+		inter.puntoInterseccion = rayo.origen + rayo.direccion * inter.alfa;
+		inter.normal = this->normal(inter.puntoInterseccion);
 		return true;
 	}
 	return false;

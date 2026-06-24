@@ -1,7 +1,8 @@
 #pragma once
 
 #include "Vector3D.h"
-#include "Objeto.h"
+
+class Objeto;
 
 class Interseccion {
 public :

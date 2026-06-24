@@ -13,6 +13,6 @@ public:
 
 	Plano();
 	Plano(const Vector3D& p, const Vector3D& n, const Material& mat);
-	bool intersecta(const Rayo& rayo, float& alfa) const override;
+	bool intersecta(const Rayo& rayo, Interseccion& inter) override;
 	Vector3D normal(const Vector3D& punto) const override;
 };

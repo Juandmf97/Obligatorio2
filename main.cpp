@@ -21,6 +21,8 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
+	escena.crearPrisma(Vector3D(-1, -1, -2), Vector3D(0, -0.5, -1),Material(Color(1,1,1),1,1,0,0,0,1,0));
+
 	Renderizador renderizador;
 	renderizador.render(escena, config);
 	return 0;

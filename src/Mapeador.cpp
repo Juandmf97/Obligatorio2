@@ -16,28 +16,29 @@ float Mapeador::atenuar(float d) {
 bool Mapeador::obtenerInterseccion(const Rayo& rayo, const Escenario& escenario, Interseccion& inter) {
 	//Fijo la proyeccion del rayo en el infinito
 	inter.alfa = escenario.infinito;
+	inter.objetoIntersectado = nullptr;
+	bool hit = false;
 	//Recorro todos los objetos 
 	for (Objeto* objeto : escenario.objetos) {
-		float alfa;
 		//Si uno se intersecta en el camino, me devuelve un alfa numérico que es la distancia al origen del rayo
 		//Si ese objeto está por delante del inter.alfa entonces significa que el inter.alfa va a quedar descartado
 		//Y este va a tomar su lugar
-		if (objeto->intersecta(rayo, alfa) && alfa > 0.0f && alfa < inter.alfa) {
-			inter.alfa = alfa;
-			inter.objetoIntersectado = objeto;
+		Interseccion temp;
+		if (objeto->intersecta(rayo, temp) && temp.alfa > 0.0f && temp.alfa < inter.alfa) {
+			inter = temp;
+			hit = true;
 		}
 	}
 	//Si no hubo una interseccion descarto
-	if (inter.objetoIntersectado == nullptr) {
-		return false;
-	}
-	//Si la hubo coloco el punto de Interseccion calculado a partir del origen y la distancia en la direccion del rayo
-	inter.puntoInterseccion = rayo.origen + rayo.direccion * inter.alfa;
-	//Calculo la normal del objeto en ese punto
-	inter.normal = inter.objetoIntersectado->normal(inter.puntoInterseccion).normalizado();
-	return true;
+	return hit;
 }
 
+/*
+//Si la hubo coloco el punto de Interseccion calculado a partir del origen y la distancia en la direccion del rayo
+inter.puntoInterseccion = rayo.origen + rayo.direccion * inter.alfa;
+//Calculo la normal del objeto en ese punto
+inter.normal = inter.objetoIntersectado->normal(inter.puntoInterseccion).normalizado();
+*/
 Color Mapeador::calcularLuzTransmitida(const Escenario& escenario, const Interseccion& inter, const Luz* luz) {
 	//Obtengo la direccion del vector que parte desde el objeto hacia la luz
 	Vector3D L = luz->obtenerDireccion(inter.puntoInterseccion) * -1;
@@ -51,7 +52,8 @@ Color Mapeador::calcularLuzTransmitida(const Escenario& escenario, const Interse
 		float alfa;
 		//Para todos los objetos que no sean el propio intersectado si el objeto se intersecta con el rayo sombra
 		//O sea si se encuentra con un objeto en el camino entre él y la luz 
-		if (objeto != inter.objetoIntersectado && objeto->intersecta(sombra, alfa) && alfa > 0.0f && alfa < d) {
+		Interseccion temp;
+		if (objeto != inter.objetoIntersectado && objeto->intersecta(sombra, temp) && temp.alfa > 0.0f && temp.alfa < d) {
 			float kRefraccion = objeto->material.kRefraccion;
 			if (kRefraccion <= 0.0f) {
 				return Color(0, 0, 0);

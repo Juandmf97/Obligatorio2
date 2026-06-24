@@ -16,5 +16,6 @@ public :
 	~Escenario();
 	void crearEsfera(const Vector3D& centro, float radio, const Material& material);
 	void crearPlano(const Vector3D& punto, const Vector3D& normal, const Material& material);
+	void crearPrisma(const Vector3D& minimo, const Vector3D& maximo, const Material& material);
 	void agregarLuz(TipoLuz tipo, const Vector3D& origen, const Vector3D& direccion, const Color& color, float intensidad);
 };
