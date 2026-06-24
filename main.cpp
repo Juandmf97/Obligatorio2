@@ -21,7 +21,12 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
-	escena.crearPrisma(Vector3D(-1, -1, -2), Vector3D(0, -0.5, -1),Material(Color(1,1,1),1,1,0,0,0,1,0));
+	//escena.crearPrisma(Vector3D(-4, -1, -8), Vector3D(4, 1, -4), Material(Color(0.8, 0.4, 0.2), 1, 1, 0, 0, 0, 1, 0));
+	
+	/*
+	<prisma punto1="-4 -1 -8" punto2="4 3 -4" material="plasticoBlanco" />
+	*/
+
 
 	Renderizador renderizador;
 	renderizador.render(escena, config);

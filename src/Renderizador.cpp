@@ -54,6 +54,9 @@ void Renderizador::render(const Escenario& escenario, const ConfigRender& config
 	fileTransmision << "P3\n" << ancho << " " << alto << "\n255\n";
 
 	Vector3D origen = config.camaraOrigen;
+	Vector3D frente = (config.camaraObjetivo - origen).normalizado();
+	Vector3D derecha = frente.cruz(config.camaraArriba).normalizado();
+	Vector3D arriba = derecha.cruz(frente).normalizado();
 	Mapeador mapeador;
 
 	for (int y = alto - 1; y >= 0; y--)
@@ -63,7 +66,7 @@ void Renderizador::render(const Escenario& escenario, const ConfigRender& config
 			float u = ((2.0f * x / ancho) - 1.0f) * ratio;
 			float v = (2.0f * y / alto) - 1.0f;
 
-			Vector3D dir(u, v, -config.distanciaPlano);
+			Vector3D dir = derecha * u + arriba * v + frente * config.distanciaPlano;
 			dir = dir.normalizado();
 
 			Rayo rayo(origen, dir);

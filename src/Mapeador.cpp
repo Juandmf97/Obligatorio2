@@ -97,7 +97,7 @@ Color Mapeador::sombrear(const Luz* luz, const Interseccion& inter, const Color&
 
 	Color luzPhong = colorLuz * factorPhong;
 	Color luzTotal = (luzDifusa + luzPhong) * factorAtenuacion;
-
+	
 	return Color(
 		luzTotal.r * luzTransmitida.r,
 		luzTotal.g * luzTransmitida.g,

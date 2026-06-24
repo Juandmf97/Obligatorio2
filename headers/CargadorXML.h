@@ -6,10 +6,12 @@
 #include <string>
 
 struct ConfigRender {
-	int ancho = 800;
+	int ancho = 600;
 	int alto = 600;
 	std::string salida = "imagen.ppm";
-	Vector3D camaraOrigen = Vector3D(0, 0, 0);
+	Vector3D camaraOrigen = Vector3D(0, 4.5, 1);
+	Vector3D camaraObjetivo = Vector3D(0, 4.5, -10);
+	Vector3D camaraArriba = Vector3D(0, 1, 0);
 	float distanciaPlano = 1.0f;
 };
 

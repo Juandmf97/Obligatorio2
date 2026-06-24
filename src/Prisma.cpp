@@ -1,7 +1,7 @@
 #include "../headers/Prisma.h"
 #include <cmath>
 
-Prisma::Prisma(Vector3D min, Vector3D max) {
+Prisma::Prisma(Vector3D min, Vector3D max, const Material& mat) : Objeto(mat) {
 	vertices.push_back(Vector3D(min.x, min.y, min.z)); //TRASERO-IZQUIERDA-ABAJO
 	vertices.push_back(Vector3D(max.x, min.y, min.z)); //TRASERO-DERECHA-ABAJO
 	vertices.push_back(Vector3D(max.x, max.y, min.z)); //TRASERO-DERECHA-ARRIBA

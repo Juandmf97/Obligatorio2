@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Source Files">
@@ -51,10 +51,14 @@
     <ClCompile Include="..\src\Renderizador.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="..\src\Prisma.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Triangulo.cpp">
+=======
+    <ClCompile Include="..\src\Cilindro.cpp">
+>>>>>>> 0822bd8bc8ef4dbe65ef6d261d4dac855685e144
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -101,10 +105,14 @@
     <ClInclude Include="..\headers\Renderizador.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="..\headers\Prisma.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\headers\Triangulo.h">
+=======
+    <ClInclude Include="..\headers\Cilindro.h">
+>>>>>>> 0822bd8bc8ef4dbe65ef6d261d4dac855685e144
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
