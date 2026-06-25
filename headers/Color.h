@@ -21,4 +21,15 @@ public :
 	Color operator*(const Color& otro) const {
 		return Color(r * otro.r, g * otro.g, b * otro.b);
 	}
+
+	Color& operator+=(const Color& otro) {
+		r += otro.r;
+		g += otro.g; 
+		b += otro.b;
+		return *this;
+	}
+
+	Color operator/(int n) const {
+		return Color(r / n, g / n, b / n);
+	}
 };

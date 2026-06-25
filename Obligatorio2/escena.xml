@@ -1,13 +1,11 @@
 <escena luzAmbiente="0.1">
-  <render ancho="600" alto="600" salida="imagen.ppm" />
+  <render ancho="600" alto="600" salida="imagen.ppm" factorAA="2" />
   <camara origen="0 4.5 1" distanciaPlano="1" />
 
 	<material id="plasticoVerde" r ="0.1" g="0.4" b="0.0" ka="1" kd="1" kr="0" kt="0" ks="0" phong="0.2" ior="1"/>
 	<material id="plasticoRojo" r ="0.4" g="0.1" b="0.05" ka="1" kd="1" kr="0" kt="0" ks="0" phong="0.2" ior="1"/>
 	<material id="grisMetalico" r="0.2" g="0.2" b="0.2" ka="0.9" kd="0.9" kr="0" kt="0" ks="0.2" phong="50" ior="1" />
 	<material id="yesoGris" r="0.5" g="0.5" b="0.5" ka="1" kd="1" kr="0" kt="0" ks="0" phong="1" ior="1" />
-  <material id="yesoAzul" r="0" g="0" b="1" ka="0.5" kd="0.5" kr="0.5" kt="0" ks="0" phong="1" ior="1" />
-  <material id="yesoRojo" r="0.8" g="0" b="0" ka="1" kd="1" kr="0" kt="0" ks="0" phong="1" ior="1" />
   <material id="espejo" r="0.7" g="0.7" b="0.7" ka="0.2" kd="0.2" kr="0.9" kt="0" ks="0.8" phong="80" ior="1" />
   <material id="vidrioRojoTenue" r="0.95" g="0.8" b="0.8" ka="0.1" kd="0.2" kr="0.05" kt="0.75" ks="0.8" phong="80" ior="1.5" />
 	<material id="plasticoBlanco" r="0.9" g="0.9" b="0.9" ka="1" kd="1" kr="0" kt="0" ks="0" phong="0.2" ior="1"/>
