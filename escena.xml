@@ -1,6 +1,6 @@
 <escena luzAmbiente="0.1">
   <render ancho="600" alto="600" salida="imagen.ppm" />
-  <camara origen="0 4.5 1" distanciaPlano="1" />
+  <camara origen="0 4.5 1" objetivo="0 4.5 -10" arriba="0 1 0" distanciaPlano="1" />
 
 	<material id="plasticoVerde" r ="0.1" g="0.4" b="0.0" ka="1" kd="1" kr="0" kt="0" ks="0" phong="0.2" ior="1"/>
 	<material id="plasticoRojo" r ="0.4" g="0.1" b="0.05" ka="1" kd="1" kr="0" kt="0" ks="0" phong="0.2" ior="1"/>
