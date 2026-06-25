@@ -20,8 +20,8 @@ bool Mapeador::obtenerInterseccion(const Rayo& rayo, const Escenario& escenario,
 	bool hit = false;
 	//Recorro todos los objetos 
 	for (Objeto* objeto : escenario.objetos) {
-		//Si uno se intersecta en el camino, me devuelve un alfa numérico que es la distancia al origen del rayo
-		//Si ese objeto está por delante del inter.alfa entonces significa que el inter.alfa va a quedar descartado
+		//Si uno se intersecta en el camino, me devuelve un alfa num rico que es la distancia al origen del rayo
+		//Si ese objeto est  por delante del inter.alfa entonces significa que el inter.alfa va a quedar descartado
 		//Y este va a tomar su lugar
 		Interseccion temp;
 		if (objeto->intersecta(rayo, temp) && temp.alfa > 0.0f && temp.alfa < inter.alfa) {
@@ -50,7 +50,7 @@ Color Mapeador::calcularLuzTransmitida(const Escenario& escenario, const Interse
 	//Recorro todos los objetos
 	for (Objeto* objeto : escenario.objetos) {
 		//Para todos los objetos que no sean el propio intersectado si el objeto se intersecta con el rayo sombra
-		//O sea si se encuentra con un objeto en el camino entre él y la luz 
+		//O sea si se encuentra con un objeto en el camino entre  l y la luz 
 		Interseccion temp;
 		if (objeto != inter.objetoIntersectado && objeto->intersecta(sombra, temp) && temp.alfa > 0.0f && temp.alfa < d) {
 			float kRefraccion = objeto->material.kRefraccion;
@@ -70,15 +70,15 @@ Color Mapeador::calcularLuzTransmitida(const Escenario& escenario, const Interse
 }
 
 Color Mapeador::sombrear(const Luz* luz, const Interseccion& inter, const Color& luzTransmitida, const Rayo& rayoIncidente, Color& luzDifusaSalida, Color& luzPhongSalida) {
-	//Obtengo la direccion desde el punto de inersección hacia la luz
+	//Obtengo la direccion desde el punto de inersecci n hacia la luz
 	Vector3D L = luz->obtenerDireccion(inter.puntoInterseccion) * -1;
 	//Calculo vector de Reflexion
 	//L = L|| + L-|
-	//L = L|| + (L*N)N esto con N normalizado, yo estoy seguro de que está normalizado porque ya lo asegure antes
+	//L = L|| + (L*N)N esto con N normalizado, yo estoy seguro de que est  normalizado porque ya lo asegure antes
 	//L|| = L - (L*N)*N
 	//R = L|| - L-| = L - 2*(L*N)*N
 	Vector3D R = L - (inter.normal * 2.0f) * (L * inter.normal);
-	R = (R* (-1.0f)).normalizado();
+	R = (R * (-1.0f)).normalizado();
 	//Aca rayoIncidente se refiere al rayo que viene del ojo, entonces tomo la direccion desde el objeto al ojo
 	Vector3D V = (rayoIncidente.direccion * -1).normalizado();
 	float distancia = luz->obtenerDistancia(inter.puntoInterseccion);
@@ -92,7 +92,12 @@ Color Mapeador::sombrear(const Luz* luz, const Interseccion& inter, const Color&
 	Color luzPhong = colorLuz * factorPhong;
 
 	Color luzTotal = (luzDifusa + luzPhong) * factorAtenuacion;
-	
+	if (luzTransmitida.r == 0 && luzTransmitida.g == 0 && luzTransmitida.b == 0) {
+		luzDifusaSalida = (luzDifusa * factorAtenuacion);
+		luzPhongSalida = (luzPhong * factorAtenuacion);
+
+		return luzTotal;
+	}
 	luzDifusaSalida = (luzDifusa * factorAtenuacion) * luzTransmitida;
 	luzPhongSalida = (luzPhong * factorAtenuacion) * luzTransmitida;
 
@@ -100,14 +105,14 @@ Color Mapeador::sombrear(const Luz* luz, const Interseccion& inter, const Color&
 }
 
 //REVISADA OK
-//Mejoras : Se podría poner un Color de luz Ambiente a futuro
+//Mejoras : Se podr a poner un Color de luz Ambiente a futuro
 Color Mapeador::calcularIluminacion(const Color& luzDifusa, const Interseccion& inter, const Escenario& escenario, Color& luzAmbienteSalida) {
 	//Obtengo la intensidad de la luz ambiente de la escena
 	float intensidadAmbiente = escenario.luzAmbiente;
 	//Calculo el valor de color de la luz ambiente como el color del material * su kAmbiente * la intensidad de la luz 
 	//Aca no uso Color de luz ambiente porque es nomas para que las sombras y eso no sean duras negras
 	Color luzAmbiente = inter.objetoIntersectado->material.color * inter.objetoIntersectado->material.kAmbiente * intensidadAmbiente;
-	//Lo sumo con las componentes de Difusa y Phong que había calculado antes
+	//Lo sumo con las componentes de Difusa y Phong que hab a calculado antes
 	luzAmbienteSalida = luzAmbiente;
 	Color luzTotal = luzAmbiente + luzDifusa;
 	return luzTotal;
@@ -129,17 +134,17 @@ Color Mapeador::calcularReflexion(const Rayo& rayoIncidente, const Interseccion&
 	}
 	//Tomo I como la direccion desde el ojo hacia el punto de Interseccion
 	Vector3D I = rayoIncidente.direccion.normalizado();
-	//Calculo la reflexion DESDE EL OJO, no desde la luz porque estoy buscando qué veo yo cuando mi vista refleja en el objeto
+	//Calculo la reflexion DESDE EL OJO, no desde la luz porque estoy buscando qu  veo yo cuando mi vista refleja en el objeto
 	Vector3D R = I - (inter.normal * 2.0f) * (I * inter.normal);
 	R = R.normalizado();
-	//Salgo desde un poquito más adelante del punto de Intersección y en la dirección del rayo reflejado a ver
-	//con qué me encuentro. Agrego ese 0.001f para que no salten problemas de autovisión
+	//Salgo desde un poquito m s adelante del punto de Intersecci n y en la direcci n del rayo reflejado a ver
+	//con qu  me encuentro. Agrego ese 0.001f para que no salten problemas de autovisi n
 	Rayo reflejado(inter.puntoInterseccion + R * 0.001f, R);
 	//Aca busco a ver si me encuentro con algo en el camino, o sea hago todo el algoritmo de interseccion pero
 	//con la camara colocada en el punto de Interseccion y mirando en la direccion de la reflexion
 	Color ambienteVacio(0, 0, 0);
 	Color difusaVacio(0, 0, 0);
-	Color phongVacio(0, 0, 0);	
+	Color phongVacio(0, 0, 0);
 	Color colorReflejado = this->interseccion(reflejado, escenario, profundidad + 1, ambienteVacio, difusaVacio, phongVacio);
 	return colorReflejado;
 }
@@ -193,17 +198,18 @@ Color Mapeador::calcularRefraccion(const Rayo& rayoIncidente, const Interseccion
 Color Mapeador::calcularColor(const Interseccion& inter, const Color& colorReflejado, const Color& colorDifuso, const Color& colorRefractado) {
 	float kRfx = inter.objetoIntersectado->material.kReflexion;
 	float kRfr = inter.objetoIntersectado->material.kRefraccion;
-	return colorDifuso * (1 - kRfx - kRfr) + colorReflejado * kRfx + colorRefractado * kRfr;
+	return  colorDifuso + (colorReflejado * kRfx) + (colorRefractado * inter.objetoIntersectado->material.color * kRfr);
+
 }
 
 Color Mapeador::interseccion(const Rayo& rayo, const Escenario& escenario, int profundidad, Color& luzAmbienteSalida, Color& luzDifusaSalida, Color& luzPhongSalida) {
-	
-	//BUSCO EL OBJETO INTERSECTADO MÁS CERCANO Y PEGO LOS DATOS EN EL INTER
+
+	//BUSCO EL OBJETO INTERSECTADO M S CERCANO Y PEGO LOS DATOS EN EL INTER
 	Interseccion inter;
 	bool intersecta = obtenerInterseccion(rayo, escenario, inter);
 
 	if (intersecta) {
-		Color luzDifusa = Color(0,0,0);
+		Color luzDifusa = Color(0, 0, 0);
 		Color luzDifusaAcumulada = Color(0, 0, 0);
 		Color luzPhongAcumulada = Color(0, 0, 0);
 
@@ -218,7 +224,7 @@ Color Mapeador::interseccion(const Rayo& rayo, const Escenario& escenario, int p
 			luzDifusaAcumulada = luzDifusaAcumulada + luzDifusaIteracion;
 			luzPhongAcumulada = luzPhongAcumulada + luzPhongIteracion;
 		}
-		
+
 		luzDifusaSalida = luzDifusaAcumulada;
 		luzPhongSalida = luzPhongAcumulada;
 
@@ -237,4 +243,3 @@ Color Mapeador::interseccion(const Rayo& rayo, const Escenario& escenario, int p
 
 	return Color(0.0f, 0.0f, 1.0f);
 }
-
