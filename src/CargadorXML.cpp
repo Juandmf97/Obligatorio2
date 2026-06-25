@@ -93,6 +93,7 @@ bool CargadorXML::cargar(const std::string& ruta, Escenario& escenario, ConfigRe
 		config.ancho = obtenerInt(render, "ancho", config.ancho);
 		config.alto = obtenerInt(render, "alto", config.alto);
 		config.salida = obtenerTexto(render, "salida", config.salida);
+		config.factorAA = obtenerInt(render, "factorAA", config.factorAA);
 	}
 
 	if (tinyxml2::XMLElement* camara = raiz->FirstChildElement("camara")) {

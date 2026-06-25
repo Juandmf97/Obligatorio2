@@ -10,11 +10,11 @@ public :
 	float atenuar(float d);
 	bool obtenerInterseccion(const Rayo& rayo, const Escenario& escenario, Interseccion& inter);
 	Color calcularLuzTransmitida(const Escenario& escenario, const Interseccion& inter, const Luz* luz);
-	Color sombrear(const Luz* luz, const Interseccion& inter, const Color& luzTransmitida, const Rayo& rayoIncidente);
-	Color calcularIluminacion(const Color& luzDifusa, const Interseccion& inter, const Escenario& escenario);
+	Color sombrear(const Luz* luz, const Interseccion& inter, const Color& luzTransmitida, const Rayo& rayoIncidente, Color& luzDifusaSalida, Color& luzPhongSalida);
+	Color calcularIluminacion(const Color& luzDifusa, const Interseccion& inter, const Escenario& escenario, Color& luzAmbienteSalida);
 	Color calcularReflexion(const Rayo& rayoIncidente, const Interseccion& inter, const Escenario& escenario, const int profundidad, const bool TIR);
 	Color calcularRefraccion(const Rayo& rayoIncidente, const Interseccion& inter, const Escenario& escenario, const int profundidad);
 	Color calcularColor(const Interseccion& inter, const Color& colorReflejado, const Color& colorDifuso, const Color& colorRefractado);
 
-	Color interseccion(const Rayo& rayo, const Escenario& escenario, int profundidad);
+	Color interseccion(const Rayo& rayo, const Escenario& escenario, int profundidad, Color& luzAmbienteSalida, Color& luzDifusaSalida, Color& luzPhongSalida);
 };

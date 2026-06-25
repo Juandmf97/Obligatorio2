@@ -13,6 +13,7 @@ struct ConfigRender {
 	Vector3D camaraObjetivo = Vector3D(0, 4.5, -10);
 	Vector3D camaraArriba = Vector3D(0, 1, 0);
 	float distanciaPlano = 1.0f;
+	int factorAA = 1;
 };
 
 class CargadorXML {
