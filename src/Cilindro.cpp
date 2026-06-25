@@ -8,7 +8,7 @@ Cilindro::Cilindro(const Vector3D& c, float r, float h, const Material& mat)
 }
 
 bool Cilindro::intersecta(const Rayo& rayo, Interseccion& inter) {
-    inter.alfa = 1e20f; // Inicializamos con un valor infinito (ver esto q tal)
+    inter.alfa = 0;
     bool hayInterseccion = false;
 
     // --- 1. INTERSECCIÓN CON EL CUERPO VERTICAL (TUBO) ---

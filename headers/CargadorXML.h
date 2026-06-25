@@ -6,7 +6,7 @@
 #include <string>
 
 struct ConfigRender {
-	int ancho = 600;
+	int ancho =800;
 	int alto = 600;
 	std::string salida = "imagen.ppm";
 	Vector3D camaraOrigen = Vector3D(0, 4.5, 1);

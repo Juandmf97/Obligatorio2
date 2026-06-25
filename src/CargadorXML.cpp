@@ -98,6 +98,8 @@ bool CargadorXML::cargar(const std::string& ruta, Escenario& escenario, ConfigRe
 
 	if (tinyxml2::XMLElement* camara = raiz->FirstChildElement("camara")) {
 		config.camaraOrigen = obtenerVector(camara, "origen", config.camaraOrigen);
+		config.camaraObjetivo = obtenerVector(camara, "objetivo", config.camaraObjetivo);
+		config.camaraArriba = obtenerVector(camara, "arriba", config.camaraArriba);
 		config.distanciaPlano = obtenerFloat(camara, "distanciaPlano", config.distanciaPlano);
 	}
 

@@ -8,7 +8,7 @@ float Mapeador::atenuar(float d) {
 	float c0 = 1;
 	float c1 = 0;
 	float c2 = 0;
-	return std::fmin(1, 1 / (c0 + c1 * d + c2 * d * d));
+	return std::fmin(1.0f, 1.0f / (c0 + c1 * d + c2 * d * d));
 }
 
 //REVISADA OK
@@ -49,7 +49,6 @@ Color Mapeador::calcularLuzTransmitida(const Escenario& escenario, const Interse
 
 	//Recorro todos los objetos
 	for (Objeto* objeto : escenario.objetos) {
-		float alfa;
 		//Para todos los objetos que no sean el propio intersectado si el objeto se intersecta con el rayo sombra
 		//O sea si se encuentra con un objeto en el camino entre él y la luz 
 		Interseccion temp;
